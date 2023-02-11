@@ -4,19 +4,22 @@ import Carritos from "./api/CartManager.js";
 import multer from "multer";
 //---------------------------------------------------------------------------
 const app = express();
+
+app.use(express.static('public'));
+
 const routerProductos = express.Router();
 const routerCarrito = express.Router();
 
 app.use("/productos", routerProductos);
 app.use("/carritos", routerCarrito);
 
-app.use(express.urlencoded({ extended: true }));
-
-app.use(express.static("./public"));
-
 routerProductos.use(express.json());
 routerCarrito.use(express.json());
 
+routerProductos.use(express.urlencoded({ extended: true }));
+routerCarrito.use(express.urlencoded({ extended: true }));
+
+//---------------------------------------------------------------------------
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "upload");
