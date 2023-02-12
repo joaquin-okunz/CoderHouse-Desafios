@@ -80,9 +80,9 @@ class ProductManager {
                 let Producto = fs.readFileSync("./Productos.json", "utf-8");
                 let producto = JSON.parse(Producto);
                 if(producto.some(producto => producto.id == id)){
-                let productoPorCambiar = producto.find(products => products.id === id);
-                
-                Productito = productoPorCambiar
+                    Productito.id = Number(id)
+                    let productoBuscado = producto.findIndex( producto => producto.id == id)
+                    this.productos.splice(productoBuscado,1,Productito);
                 }
                 else return "No se encontró el producto";
             }
