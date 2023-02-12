@@ -74,16 +74,21 @@ class ProductManager {
             return "Archivo no encontrado";
     }
 
-    /*      //ni palida idea
-        UpdateProductsById(id){
+         //En obras
+        UpdateProductsById(id ,Productito){
             if (fs.existsSync("./Productos.json")) {
                 let Producto = fs.readFileSync("./Productos.json", "utf-8");
                 let producto = JSON.parse(Producto);
+                if(producto.some(producto => producto.id == id)){
                 let productoPorCambiar = producto.find(products => products.id === id);
-    
+                
+                Productito = productoPorCambiar
+                }
+                else return "No se encontró el producto";
             }
+            else return "No hay productos"
         }
-        */
+        //En obras
 }
 
 const prods = new ProductManager;
