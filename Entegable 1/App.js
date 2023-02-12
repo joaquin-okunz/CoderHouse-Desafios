@@ -5,7 +5,7 @@ import multer from "multer";
 //---------------------------------------------------------------------------
 const app = express();
 
-app.use(express.static('./public'));
+app.use(express.static('public'));
 
 const routerProductos = express.Router();
 const routerCarrito = express.Router();
