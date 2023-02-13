@@ -8,7 +8,7 @@
 </head>
 <body>
     <h2> Ingrese un producto</h2>
-    <form action="/productos/guardar" method="post">
+    <form action="/productos/guardar" method="POST">
         Nombre: <input type="text" name="title">
         descripcion: <input type="text" name="description ">
         code: <input type="text" name ="code">
@@ -19,8 +19,7 @@
         <button>Enviar</button>
 
         <h2> Actualice un producto</h2>
-        <form action="/productos/actualizar" method="put">
-            id: <input type="text" name="id">
+        <form action="/productos/actualizar" method="PUT">
             Nombre: <input type="text" name="title">
             descripcion: <input type="text" name="description ">
             code: <input type="text" name ="code">
@@ -29,6 +28,7 @@
             stock:<input type="number" name="stock">
             category:<input type="text" name="category">
             <button>Enviar</button>
+        </form>  
 
     </form>
     <h2> Agarre un carrito</h2>

@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from "body-parser";
 import prods from "./api/ProductManager.js";
 import Carritos from "./api/CartManager.js";
 import multer from "multer";
@@ -13,11 +14,11 @@ const routerCarrito = express.Router();
 app.use("/productos", routerProductos);
 app.use("/carritos", routerCarrito);
 
-routerProductos.use(express.json());
-routerCarrito.use(express.json());
+routerProductos.use(bodyParser.json());
+routerCarrito.use(bodyParser.json());
 
-routerProductos.use(express.urlencoded({ extended: true }));
-routerCarrito.use(express.urlencoded({ extended: true }));
+routerProductos.use(bodyParser.urlencoded({ extended: true }));
+routerCarrito.use(bodyParser.urlencoded({ extended: true }));
 
 //---------------------------------------------------------------------------
 const storage = multer.diskStorage({
@@ -40,52 +41,57 @@ app.post('/subir/imagen', upload.single('Imagen'), (req, res, next) => {
     res.send(`!Archivo <b>${file.originalname}</b> subido exitosamente!`)
 })
 //---------------------------------------------------------------------------
-routerProductos.get("/productos/listar", (req, res) => {
+routerProductos.get("/listar", (req, res) => {
     res.json(prods.getProducts())
 })
 
-routerProductos.get("/productos/listar/:pid", (req, res) => {
-    let { id } = req.params;
-    res.json(prods.getProductById(id));
+routerProductos.get("/listar/:pid", (req, res) => {
+    let { pid } = req.params;
+    res.json(prods.getProductById(pid));
 })
 
 
-routerProductos.get("/productos/limit/:pid", (req, res) => {
-    let { id } = req.params;
-    res.json(prods.getProductsWhithLimit(id));
+routerProductos.get("/limit/:pid", (req, res) => {
+    let { pid } = req.params;
+    res.json(prods.getProductsWhithLimit(pid));
 })
 
 
-routerProductos.post("/productos/guardar", (req, res) => {
+routerProductos.post("/guardar", (req, res) => {
     let producto = req.body;
     prods.addproduct(producto);
-    res.send(producto);
+    res.json(producto);
 })
 
-routerProductos.delete("/productos/eliminar/:pid", (req, res) => {
+routerProductos.delete("/borrar/:pid", (req, res) => {
+    let { pid } = req.params;
+    let producto = prods.deleteProductsById(pid);
+    res.json(producto);
+})
+
+
+routerProductos.put("/actualizar/:pid", (req, res) => {
     let { id } = req.params;
-    res.json(prods.deleteProductsById(id));
+    let producto = req.body;
+    res.json(prods.UpdateProductsById(id, producto));
 })
 
-/*
-routerProductos.put("/productos/actualizar/pid", (req,res) => {
-    let foto = "Di patataa";
-})
-*/
+
+
 //---------------------------------------------------------------------------
 
-routerCarrito.get("/carritos/listar/:cid", (req, res) => {
+routerCarrito.get("/listar/:cid", (req, res) => {
     let { cid } = req.params;
     res.json(Carritos.getCartById(cid));
 })
 
-routerCarrito.post("/carritos/crear", (req, res) => {
+routerCarrito.post("/crear", (req, res) => {
     res.json(Carritos.addCart());
 })
 
-routerCarrito.get("/carritos/guardar/:cid/:pid", (req, res) => {
-    let {cid} = req.params;
-    let {pid} = req.params;
+routerCarrito.get("/guardar/:cid/:pid", (req, res) => {
+    let { cid } = req.params;
+    let { pid } = req.params;
     res.json(Carritos.addProductInCart(cid, pid));
 })
 

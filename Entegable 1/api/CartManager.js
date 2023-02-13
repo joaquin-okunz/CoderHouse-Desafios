@@ -1,3 +1,5 @@
+import fs from "fs";
+
 class Carts {
     constructor() {
         this.cart = [];
@@ -8,7 +10,7 @@ class Carts {
         if (fs.existsSync("./Carritos.json")) {
             let Carrito = fs.readFileSync("./Carritos.json", "utf-8");
             let carrito = JSON.parse(Carrito);
-            this.id = cart[prod.length - 1].id + 1;
+            this.id = carrito[carrito.length - 1].id + 1;
             let carrit = this.id;
             carrito.push({ id: carrit, Productos: [] });
             fs.writeFileSync("./Carritos.json", JSON.stringify(carrito));
@@ -27,8 +29,8 @@ class Carts {
         if (fs.existsSync("./Carritos.json")) {
             let Carrito = fs.readFileSync("./Carritos.json", "utf-8");
             let carrito = JSON.parse(Carrito);
-            if (carrito.some(carrito => carrito.cid == cid)) {
-                let carritoBuscado = carrito.filter(carrito => carrito.cid == cid);
+            if (carrito.some(carrito => carrito.id == cid)) {
+                let carritoBuscado = carrito.filter(carrito => carrito.id == cid);
                 return carritoBuscado;
             }
             else return "Carrito no encontrado";
@@ -44,12 +46,12 @@ class Carts {
                 let carrito = JSON.parse(Carrito);
                 let Producto = fs.readFileSync("./Productos.json", "utf-8");
                 let producto = JSON.parse(Producto);
-                if (carrito.some(carrito => carrito.cid == cid)) {
-                    let carritoBuscado = carrito.filter(carrito => carrito.cid == cid);
-                    if (producto.some(producto => producto.pid == pid)) {
+                if (carrito.some(carrito => carrito.id == cid)) {
+                    let carritoBuscado = carrito.filter(carrito => carrito.id == cid);
+                    if (producto.some(producto => producto.id == pid)) {
                         let cantidadDeProductos = 0;
                         let cantidadProducto = ++cantidadDeProductos;
-                        if (carritoBuscado[0].Productos.some(producto => producto.pid == pid)) {
+                        if (carritoBuscado[0].Productos.some(producto => producto.id == pid)) {
                             ++cantidadProducto;
                         }
                         else

@@ -14,13 +14,12 @@ class ProductManager {
             producto.id = this.id;
             prod.push(producto);
             fs.writeFileSync("./Productos.json", JSON.stringify(prod));
-            return prod;
 
         } else {
             producto.id = ++this.id;
             this.products.push(producto);
             fs.writeFileSync("./Productos.json", JSON.stringify(this.products));
-            return producto;
+            
         }
     }
 
@@ -32,46 +31,42 @@ class ProductManager {
             return producto;
         }
         else
-            return ("El archivo no existe");
+            return ("No hay productos");
     }
 
 
-    getProductById(id) {
+    getProductById(pid) {
         if (fs.existsSync("./Productos.json")) {
             let Producto = fs.readFileSync("./Productos.json", "utf-8")
             let producto = JSON.parse(Producto)
-            if (producto.some(producto => producto.id == id)) {
-                let producto_buscado = producto.filter(producto => producto.id == id)
+            if (producto.some(producto => producto.id == pid)) {
+                let producto_buscado = producto.filter(producto => producto.id == pid)
                 return producto_buscado;
             }
+            else return "El producto no existe";
         }
-        else return ("El archivo no existe");
+        else return "El archivo no existe";
     }
 
-    getProductsWhithLimit(id) {
+    getProductsWhithLimit(pid) {
         if (fs.existsSync("./Productos.json")) {
             let Producto = fs.readFileSync("./Productos.json", "utf-8");
             let producto = JSON.parse(Producto);
-            let limit = producto.filter(producto => producto.id <= id);
+            let limit = producto.filter(producto => producto.id <= pid);
             return limit;
         }
     }
 
-    deleteProductsById(id) {
+    deleteProductsById(pid) {
         if (fs.existsSync("./Productos.json")) {
             let Producto = fs.readFileSync("./Productos.json", "utf-8");
             let producto = JSON.parse(Producto);
-            const deleteProduct = producto.find(products => products.id === id);
-            if (deleteProduct) {
-                let productsIndex = producto.indexOf(deleteProduct);
-                producto.splice(productsIndex, 1);
-                fs.writeFileSync("./Productos.json", JSON.stringify(producto))
-                return producto;
-            } else {
-                console.error('el producto buscado no existe');
-            }
-        } else
-            return "Archivo no encontrado";
+            if(producto.some(producto => producto.id == pid)){
+            let newProduct = producto.find(products => products.id != pid);
+            fs.writeFileSync("./Productos.json", JSON.stringify(newProduct));
+            return newProduct;  
+        }
+        }
     }
 
          //En obras
