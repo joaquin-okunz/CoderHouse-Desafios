@@ -10,16 +10,15 @@ class ProductManager {
         if (fs.existsSync("./Productos.json")) {
             let Producto = fs.readFileSync("./Productos.json", "utf-8");
             let prod = JSON.parse(Producto);
-            this.id = prod[prod.length - 1].id + 1;
-            producto.id = this.id;
-            prod.push(producto);
-            fs.writeFileSync("./Productos.json", JSON.stringify(prod));
-
+                this.id = prod[prod.length - 1].id + 1;
+                producto.id = this.id;
+                prod.push(producto);
+                fs.writeFileSync("./Productos.json", JSON.stringify(prod));
         } else {
             producto.id = ++this.id;
             this.products.push(producto);
             fs.writeFileSync("./Productos.json", JSON.stringify(this.products));
-            
+
         }
     }
 
@@ -57,33 +56,34 @@ class ProductManager {
         }
     }
 
-    deleteProductsById(pid) {
+    deleteProducts(pid) {
         if (fs.existsSync("./Productos.json")) {
             let Producto = fs.readFileSync("./Productos.json", "utf-8");
             let producto = JSON.parse(Producto);
-            if(producto.some(producto => producto.id == pid)){
-            let newProduct = producto.find(products => products.id != pid);
-            fs.writeFileSync("./Productos.json", JSON.stringify(newProduct));
-            return newProduct;  
-        }
+            if (producto.some(producto => producto.id == pid)) {
+                let newProduct = producto.find(products => products.id != pid);
+                fs.writeFileSync("./Productos.json", JSON.stringify(newProduct));
+                return producto;
+            }
+            else return "Producto no encontrado";
         }
     }
 
-         //En obras
-        UpdateProductsById(id ,Productito){
-            if (fs.existsSync("./Productos.json")) {
-                let Producto = fs.readFileSync("./Productos.json", "utf-8");
-                let producto = JSON.parse(Producto);
-                if(producto.some(producto => producto.id == id)){
-                    Productito.id = Number(id)
-                    let productoBuscado = producto.findIndex( producto => producto.id == id)
-                    this.productos.splice(productoBuscado,1,Productito);
-                }
-                else return "No se encontró el producto";
+    //En obras
+    UpdateProductsById(pid, Prod) {
+        if (fs.existsSync("./Productos.json")) {
+            let Producto = fs.readFileSync("./Productos.json", "utf-8");
+            let producto = JSON.parse(Producto);
+            if (producto.some(producto => producto.id == pid)) {
+                Prod.id = Number(pid);
+                let productoBuscado = producto.findIndex(producto => producto.id == pid)
+                producto.splice(productoBuscado, 1, Prod);
             }
-            else return "No hay productos"
+            else return "No se encontró el producto";
         }
-        //En obras
+        else return "No hay productos"
+    }
+    //En obras
 }
 
 const prods = new ProductManager;

@@ -65,15 +65,15 @@ routerProductos.post("/guardar", (req, res) => {
 
 routerProductos.delete("/borrar/:pid", (req, res) => {
     let { pid } = req.params;
-    let producto = prods.deleteProductsById(pid);
+    let producto = prods.deleteProducts(pid);
     res.json(producto);
 })
 
 
 routerProductos.put("/actualizar/:pid", (req, res) => {
-    let { id } = req.params;
-    let producto = req.body;
-    res.json(prods.UpdateProductsById(id, producto));
+    let { pid } = req.params;
+    let prod = req.body;
+    res.json(prods.UpdateProductsById(pid, prod));
 })
 
 
@@ -89,7 +89,7 @@ routerCarrito.post("/crear", (req, res) => {
     res.json(Carritos.addCart());
 })
 
-routerCarrito.get("/guardar/:cid/:pid", (req, res) => {
+routerCarrito.post("/guardar/:cid/:pid", (req, res) => {
     let { cid } = req.params;
     let { pid } = req.params;
     res.json(Carritos.addProductInCart(cid, pid));
@@ -102,3 +102,22 @@ const server = app.listen(PORT, () => {
     console.log(`Servidor http escuchando en el puerto ${server.address().port}`)
 })
 server.on("error", error => console.log(`Error en servidor ${error}`))
+
+
+
+
+/*
+<h2> Actualice un producto</h2>
+        <form action="/productos/actualizar" method="PUT"> 
+            id:<input type="number" name="id">
+            Nombre: <input type="text" name="title">
+            descripcion: <input type="text" name="description ">
+            code: <input type="text" name ="code">
+            Precio: <input type="number" name="price">
+            urlImagen: <input type="text" name="thumbnail">
+            stock:<input type="number" name="stock">
+            status<input  type="boolean" name="status" value="true">
+            category:<input type="text" name="category">
+            <button>Enviar</button>
+        </form>  
+        */
