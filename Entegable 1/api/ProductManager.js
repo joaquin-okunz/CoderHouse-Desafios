@@ -61,9 +61,9 @@ class ProductManager {
             let Producto = fs.readFileSync("./Productos.json", "utf-8");
             let producto = JSON.parse(Producto);
             if (producto.some(producto => producto.id == pid)) {
-                let newProduct = producto.find(products => products.id != pid);
+                let newProduct = producto.filter(producto => producto.id != pid);
                 fs.writeFileSync("./Productos.json", JSON.stringify(newProduct));
-                return producto;
+                return newProduct;
             }
             else return "Producto no encontrado";
         }
@@ -78,6 +78,8 @@ class ProductManager {
                 Prod.id = Number(pid);
                 let productoBuscado = producto.findIndex(producto => producto.id == pid)
                 producto.splice(productoBuscado, 1, Prod);
+                fs.writeFileSync("./Productos.json", JSON.stringify(producto));
+                return Prod;
             }
             else return "No se encontró el producto";
         }

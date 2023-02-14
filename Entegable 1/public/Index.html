@@ -19,13 +19,20 @@
         category:<input type="text" name="category">
         <button>Enviar</button>
 
-        
-
     </form>
     <h2> Agarre un carrito</h2>
     <form action="/carritos/crear" method="post">
         <button>Enviar</button>
     </form>
+
+</br></hr>
+
+<h2>Subir foto del producto</h2>
+
+<form action="/subir" enctype="multipart/form-data" method="POST">
+    <input type="file" name="miArchivo">
+    <input type="submit" value="Subir archivos">
+</form>
 
 </body>
 </html>

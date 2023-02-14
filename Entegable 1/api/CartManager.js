@@ -11,14 +11,13 @@ class Carts {
             let Carrito = fs.readFileSync("./Carritos.json", "utf-8");
             let carrito = JSON.parse(Carrito);
             this.id = carrito[carrito.length - 1].id + 1;
-            let carrit = this.id;
-            carrito.push({ id: carrit, Productos: [] });
+            carrito.push({ id: this.id, Products: [] });
             fs.writeFileSync("./Carritos.json", JSON.stringify(carrito));
             return carrito;
 
         } else {
             let carrit = ++this.id;
-            this.cart.push({ id: carrit, Productos: [] });
+            this.cart.push({ id: carrit, Products: [] });
             fs.writeFileSync("./Carritos.json", JSON.stringify(this.cart));
             return this.cart;
 
@@ -38,34 +37,36 @@ class Carts {
         else return "No hay ningun carrito";
     }
 
-    //PERDON POR ESTO :(
     addProductInCart(cid, pid) {
-        if (fs.existsSync("./Carritos.json")) {
-            if (fs.existsSync("./Productos.json")) {
+        if (fs.existsSync("./Productos.json")) {
+            let Producto = fs.readFileSync("./Productos.json", "utf-8");
+            let producto = JSON.parse(Producto);
+            if (fs.existsSync("./Carritos.json")) {
                 let Carrito = fs.readFileSync("./Carritos.json", "utf-8");
                 let carrito = JSON.parse(Carrito);
-                let Producto = fs.readFileSync("./Productos.json", "utf-8");
-                let producto = JSON.parse(Producto);
-                if (carrito.some(carrito => carrito.id == cid)) {
-                    let carritoBuscado = carrito.filter(carrito => carrito.id == cid);
-                    if (producto.some(producto => producto.id == pid)) {
-                        let cantidadDeProductos = 0;
-                        let cantidadProducto = ++cantidadDeProductos;
-                        if (carritoBuscado[0].Productos.some(producto => producto.id == pid)) {
-                            ++cantidadProducto;
+                if (producto.some(producto => producto.id == pid)) {
+                    let ProdId = pid;
+                    if (carrito.some(carrito => carrito.id == cid)) {
+                        let carritoBuscado = carrito.filter(carrito => carrito.id == cid);
+                        let Cantidad = 0;
+                        let cantidad = ++Cantidad;
+                        if (carritoBuscado.Products.some(producto => producto.id == ProdId)) {
+                            ++cantidad;
                         }
                         else
-                            carritoBuscado[0].Productos.push({ id: pid, quantity: cantidadProducto });
+                            carritoBuscado.Products.push({ "id": ProdId, "Quantity": cantidad });
+                        return carritoBuscado;
                     }
-                    else return "Producto no encontrado";
+                    else return "Carrito no encontrado";
                 }
-                else return "Carrito no encontrado";
+                else return "Producto no encontrado";
             }
-            else return "No hay productos";
+            else return "No hay carritos";
         }
-        else return "No hay carritos";
+        else return "No hay productos";
     }
 }
+
 
 
 const Carritos = new Carts;

@@ -22,23 +22,23 @@ routerCarrito.use(bodyParser.urlencoded({ extended: true }));
 
 //---------------------------------------------------------------------------
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "upload");
+    destination: function(req, file, cb){
+        cb(null, './upload')
     },
-    filename: function (req, file, cb) {
-        cb(null, `${date.now()}-${file.originalname}`);
+    filename: function(req, file, cb){
+        cb(null, `${Date.now()}-${file.originalname}`)
     }
 })
-const upload = multer({ storage: storage });
+const uploads = multer({storage: storage})
 
-app.post('/subir/imagen', upload.single('Imagen'), (req, res, next) => {
+app.post('/subir', uploads.single('miArchivo'), (req, res, next) => {
     const file = req.file
-    if (!file) {
-        const error = new Error('Error subiendo el archivo')
-        error.httpStatusCode = 400
-        return next(error)
+    if(!file){
+        const error = new Error('Error subiendo el archivo');
+        error.httpStatusCode = 400;
+        return next(error);
     }
-    res.send(`!Archivo <b>${file.originalname}</b> subido exitosamente!`)
+    else res.send(`!Archivo subido exitosamente!`);
 })
 //---------------------------------------------------------------------------
 routerProductos.get("/listar", (req, res) => {
@@ -89,9 +89,9 @@ routerCarrito.post("/crear", (req, res) => {
     res.json(Carritos.addCart());
 })
 
-routerCarrito.post("/guardar/:cid/:pid", (req, res) => {
-    let { cid } = req.params;
-    let { pid } = req.params;
+routerCarrito.post("/:cid/productos/:pid", (req, res) => {
+    let { cid } = req.params.cid;
+    let { pid } = req.params.pid;
     res.json(Carritos.addProductInCart(cid, pid));
 })
 
