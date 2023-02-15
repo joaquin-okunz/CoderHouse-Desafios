@@ -37,6 +37,7 @@ class Carts {
         else return "No hay ningun carrito";
     }
 
+    //Perdon por esto :(
     addProductInCart(cid, pid) {
         if (fs.existsSync("./Productos.json")) {
             let Producto = fs.readFileSync("./Productos.json", "utf-8");
@@ -45,17 +46,16 @@ class Carts {
                 let Carrito = fs.readFileSync("./Carritos.json", "utf-8");
                 let carrito = JSON.parse(Carrito);
                 if (producto.some(producto => producto.id == pid)) {
-                    let ProdId = pid;
                     if (carrito.some(carrito => carrito.id == cid)) {
-                        let carritoBuscado = carrito.filter(carrito => carrito.id == cid);
-                        let Cantidad = 0;
-                        let cantidad = ++Cantidad;
-                        if (carritoBuscado.Products.some(producto => producto.id == ProdId)) {
-                            ++cantidad;
+                        let ICar = carrito.findIndex(carrito => carrito.id == cid);
+                        if (carrito[ICar].Products.some(producto => producto.id == pid)){
+                            let IProd = carrito[ICar].Products.findIndex(producto => producto.id == pid);
+                            carrito[ICar].Products[IProd].Quantity += 1;
                         }
                         else
-                            carritoBuscado.Products.push({ "id": ProdId, "Quantity": cantidad });
-                        return carritoBuscado;
+                            carrito[ICar].Products.push({ "id": pid, "Quantity": 1 });
+                        fs.writeFileSync("./Carritos.json", JSON.stringify(carrito));
+                        return carrito[ICar];
                     }
                     else return "Carrito no encontrado";
                 }

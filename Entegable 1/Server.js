@@ -90,8 +90,8 @@ routerCarrito.post("/crear", (req, res) => {
 })
 
 routerCarrito.post("/:cid/productos/:pid", (req, res) => {
-    let { cid } = req.params.cid;
-    let { pid } = req.params.pid;
+    let  cid  = req.params.cid;
+    let  pid  = req.params.pid;
     res.json(Carritos.addProductInCart(cid, pid));
 })
 
