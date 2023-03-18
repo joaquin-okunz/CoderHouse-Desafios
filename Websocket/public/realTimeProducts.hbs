@@ -1,0 +1,24 @@
+<h1>Lista de productos en tiempo real</h1>
+
+<script src="/socket.io/socket.io.js"></script>
+<table>
+<tr>
+    <th>Nombre</th>
+    <th>precio</th>
+    <th>Stock</th>
+    <th>Id</th>
+</tr>
+{{#each productos}}
+<ul id="listaProductos">
+<tr>
+    <th>{{this.nombre}}</th>
+    <th>{{this.precio}}</th>
+    <th>{{this.stock}}</th>
+    <th>{{this.id}}</th>
+</tr>
+</ul>
+{{/each}}
+
+
+</table>
+<script src="/js/index.js", type="module"></script>
