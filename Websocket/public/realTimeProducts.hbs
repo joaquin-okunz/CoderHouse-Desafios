@@ -2,21 +2,22 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <table>
+
 <tr>
     <th>Nombre</th>
     <th>precio</th>
     <th>Stock</th>
     <th>Id</th>
 </tr>
-{{#each productos}}
-<ul id="listaProductos">
+
+
+{{#each prod}}
 <tr>
-    <th>{{this.nombre}}</th>
-    <th>{{this.precio}}</th>
-    <th>{{this.stock}}</th>
-    <th>{{this.id}}</th>
+    <td>{{this.nombre}}</td>
+    <td>{{this.precio}}</td>
+    <td>{{this.stock}}</td>
+    <td>{{this.id}}</td>
 </tr>
-</ul>
 {{/each}}
 
 
