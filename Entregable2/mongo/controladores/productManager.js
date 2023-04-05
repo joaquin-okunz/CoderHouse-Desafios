@@ -4,17 +4,17 @@ import modeloDeProducto from "../modelos/productModel.js";
 class ProductManager {
 
     static async createProduct(req, res) {
-        const { body, file } = req
+        const  body  = req;
         const producto = {
           ... body,
         }
         const result = await modeloDeProducto.create(producto)
-        res.status(200).end()
+        res.status(201)
       }
 
     static async getProducts(req, res) {
         const result = await modeloDeProducto.find()
-        res.status(200).end()
+        res.status(201).json(result)
     }
 
     static async getProductById(req, res) {
@@ -23,20 +23,20 @@ class ProductManager {
     if (!result) {
       res.status(404).end()
     }
-    else res.status(200).end()
+    else res.status(201).json(result)
   }
 
   static async updateProductById(req, res) {
     const id = req.params;
     const cuerpo = req.body;
     await modeloDeProducto.updateOne({_id: id}, {$set: body, cuerpo})
-    res.status(200).end()
+    res.status(201).json(result)
   }
 
   static async deleteProductById(req,res) {
     const id = req.params;
     await modeloDeProducto.deleteOne({_id: id})
-    res.status(200).end()
+    res.status(201).json(result)
   }
 }
 
