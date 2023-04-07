@@ -4,12 +4,14 @@
   <tr>
     <th>Nombre</th>
     <th>Descripción</th>
-    <th>Precio</th>
+    <th>
+      <a href="{{sortLink}}">Precio</a>
+    </th>
     <th>Stock</th>
     <th>Código</th>
     <th>Categoría</th>
   </tr>
-  {{#each productos}}
+  {{#each payload}}
     <tr>
       <td>{{this.nombre}}</td>
       <td>{{this.descripcion}}</td>
@@ -20,4 +22,14 @@
     </tr>
   {{/each}}
 </table>
+<p>página actual: {{page}}</p>
+{{#if prevLink}}
+<a href="{{prevLink}}" role="button">Anterior</a>
+{{/if}}
+{{#if nextLink}}
+<a href="{{nextLink}}" role="button">Posterior</a>
+{{/if}}
+
+
+
 <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">

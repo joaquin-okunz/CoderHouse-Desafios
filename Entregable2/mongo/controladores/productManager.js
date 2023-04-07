@@ -1,4 +1,5 @@
 import modeloDeProducto from "../modelos/productModel.js";
+import APICommunsUtil from "../../utils/APIcommun.js"
 
 
 class ProductManager {
@@ -13,8 +14,16 @@ class ProductManager {
       }
 
     static async getProducts(req, res) {
-        const result = await modeloDeProducto.find()
-        res.status(201).json(result)
+      const {query: {limit= 5, page= 1, sort}} = req
+        const options = {
+            limit,
+            page
+        }
+        if (sort){
+            options.sort = {precio : sort}
+        }
+        const result = await modeloDeProducto.paginate({},options)
+        res.json (APICommunsUtil.buidResponse({...result, sort}))
     }
 
     static async getProductById(req, res) {

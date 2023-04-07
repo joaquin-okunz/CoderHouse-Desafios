@@ -8,8 +8,8 @@ routerCarritos
     .post('/crear', CarrManager.CreateCarritos)
     .get('/', CarrManager.getCarritos)
     .get('/:id', CarrManager.getCarritoById)
-    .put('/agregar/:id', CarrManager.ProductosInCarrito)
-    .delete('/eliminar/:cid/productos/:pid', CarrManager.ProductoOffCarrito)
+    .post('/agregar/:cid', CarrManager.ProductosInCarrito)
+    .put('/eliminarProducto/:cid', CarrManager.ProductoOffCarrito)
     .delete('/eliminar/:id', CarrManager.DeleteCarrito)
     .put('/vaciar/:id', CarrManager.VoidCarrito)
 
