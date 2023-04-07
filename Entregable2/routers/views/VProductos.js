@@ -21,7 +21,7 @@ PRouter.get('/categoria/:cate', async (req, res) => {
 })
 
 PRouter.get('/', async (req, res) => {
-        const {query: {limit= 5, page= 1, sort}} = req
+        const {query: {limit= 10, page= 1, sort}} = req
         const options = {
             limit,
             page

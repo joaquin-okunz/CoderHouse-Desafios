@@ -46,6 +46,30 @@ class CarrManager {
         }
     }
 
+
+
+    static async SumarORestarProductos(req, res) {
+        const { cid, pid, num } = req.body;
+        try {
+            let carrito = await modeloDeCarritos.findById(cid).populate("Productos.Producto");
+            if (!carrito) {
+                return res.status(404).json("Carrito no encontrado");
+            }
+            const productIndex = carrito.Productos.findIndex(
+                (p) => p.Producto && p.Producto._id.toString() === pid
+            );
+            if (productIndex) {
+                carrito.Productos[productIndex].quantity = num;
+            } 
+            await carrito.save();
+            return res.status(200).json(carrito);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: "SERVER ERROR" });
+        }
+    }
+
+    
     static async ProductoOffCarrito(req, res) {
         const { pid, cid } = req.body;
     

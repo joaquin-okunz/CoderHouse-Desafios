@@ -14,7 +14,7 @@ class ProductManager {
       }
 
     static async getProducts(req, res) {
-      const {query: {limit= 5, page= 1, sort}} = req
+      const {query: {limit= 10, page= 1, sort}} = req
         const options = {
             limit,
             page
@@ -25,6 +25,19 @@ class ProductManager {
         const result = await modeloDeProducto.paginate({},options)
         res.json (APICommunsUtil.buidResponse({...result, sort}))
     }
+
+
+    static async getProductsCategory(req, res) {
+      try {
+        const { cate } = req.params;
+        const result = await modeloDeProducto.find({ categoria: cate });
+        res.json({ payload: result })
+    }
+    catch {
+        res.status(500).send("Server error");
+    }
+    }
+
 
     static async getProductById(req, res) {
         const id = req.params.id;
@@ -56,3 +69,5 @@ class ProductManager {
 }
 
 export default ProductManager;
+
+//ss

@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "    {\r\n        \"nombre\":\"Hambuguesas\",\r\n        \"descripcion\":\"mejor que la pizza\",\r\n        \"precio\":1700,\r\n        \"stock\":120,\r\n        \"code\":\"123ght\",\r\n        \"categoria\":\"Comida\"\r\n    }",
+							"raw": "    {\r\n        \"nombre\":\"Placa metalica\",\r\n        \"descripcion\":\"Personalizada con el nombre\",\r\n        \"precio\":2100,\r\n        \"stock\":500,\r\n        \"code\":\"thy563\",\r\n        \"categoria\":\"Entretenimiento\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -138,6 +138,28 @@
 								"api",
 								"productos",
 								"6428745ac1a686aeb748e44b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ver por categoría",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/productos/categoria/Entretenimiento",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"productos",
+								"categoria",
+								"Entretenimiento"
 							]
 						}
 					},
@@ -310,6 +332,37 @@
 								"api",
 								"carritos",
 								"eliminarProducto",
+								"642f03cac936dc329a232c94"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar la cantidad de un producto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " { \"pid\": \"6428745ac1a686aeb748e44b\", \"cid\": \"642f03cac936dc329a232c94\", \"num\":23}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/carritos/cantidad/642f03cac936dc329a232c94",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"carritos",
+								"cantidad",
 								"642f03cac936dc329a232c94"
 							]
 						}

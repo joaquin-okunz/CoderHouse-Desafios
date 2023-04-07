@@ -1,0 +1,19 @@
+ViewProductos  {
+    http://localhost:8080/productos // Ver todos los productos en páginas
+    http://localhost:8080/productos/:id // Ver producto especifico
+    http://localhost:8080/productos/categoria/:cate // Ver productos concategoría especificada
+    http://localhost:8080/productos/todos // Ver todos los productos sin páginas 
+}
+
+ViewCarritos {
+    http://localhost:8080/carritos/:id // Ver carrito especifico
+}
+
+AL MOMENTO DE QUERER CREAR O ACTUALIZAR UN CARRITO O SUS PRODUCTOS COLOCAR EL ID DEL CARRITO
+EN EL BODY Y EN EL PARAMETRO.
+
+el body al momento de eliminar un producto de un carrito o agregarlo es: 
+ { "pid": "", "cid": ""}
+
+el body al momento de cambiar la cantidad de un producto de un carrito es:
+ { "pid": "", "cid": "", "num": ""}

@@ -12,5 +12,7 @@ routerCarritos
     .put('/eliminarProducto/:cid', CarrManager.ProductoOffCarrito)
     .delete('/eliminar/:id', CarrManager.DeleteCarrito)
     .put('/vaciar/:id', CarrManager.VoidCarrito)
+    .put('/cantidad/:cid', CarrManager.SumarORestarProductos)
+
 
     export default routerCarritos;
