@@ -53,7 +53,6 @@ const initPassport = () => {
         email,
         age,
         password: createHash(password),
-        role,
       })
 /*
       if (user.email === "adminCoder@coder.com") {
