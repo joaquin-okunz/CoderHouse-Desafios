@@ -1,0 +1,36 @@
+
+<h1>Productos</h1>
+
+<table id="mainP">
+  <tr>
+    <th>Nombre</th>
+    <th>Descripción</th>
+    <th>
+      <a href="{{sortLink}}">Precio</a>
+    </th>
+    <th>Stock</th>
+    <th>Código</th>
+    <th>Categoría</th>
+  </tr>
+  {{#each payload}}
+    <tr>
+      <td>{{this.nombre}}</td>
+      <td>{{this.descripcion}}</td>
+      <td>{{this.precio}}</td>
+      <td>{{this.stock}}</td>
+      <td>{{this.code}}</td>
+      <td>{{this.categoria}}</td>
+    </tr>
+  {{/each}}
+</table>
+<p>página actual: {{page}}</p>
+{{#if prevLink}}
+<a href="{{prevLink}}" role="button">Anterior</a>
+{{/if}}
+{{#if nextLink}}
+<a href="{{nextLink}}" role="button">Posterior</a>
+{{/if}}
+
+<a href="/profile" role="button">Perfil</a>
+
+<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">

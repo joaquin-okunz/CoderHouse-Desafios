@@ -1,0 +1,16 @@
+<article>
+  <h1>inicio de sesión</h1>
+  {{#if error }}
+    <p>{{error}}</p>
+  {{/if}}
+  <form action="/api/sessions/login" method="POST">
+    <input type="text" name="email" placeholder="Correo">
+    <input type="password"  name="password" placeholder="Contraseña">
+    <p><a href="/reset-password">¿Olvisdaste tu contraseña?</a></p>
+    <p>¿No tienes una cuenta? <a href="/register">registrate</a></p>
+    <button type="submit">Entrar</button>
+    <a href="/auth/github" role="button">inicia sesión con Github</a>
+  </form>
+</article>
+
+ <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">

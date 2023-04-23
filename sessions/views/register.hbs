@@ -1,0 +1,17 @@
+<article>
+  <h1>Crea una cuenta</h1>
+  {{#if error }}
+    <p>{{error}}</p>
+  {{/if}}
+  <form action="/api/sessions/register" method="POST">
+    <input type="text" name="first_name" placeholder="Nombre">
+    <input type="text" name="last_name" placeholder="Apellido">
+    <input type="email" name="email" placeholder="Correo">
+    <input type="number" name="age" placeholder="Edad">
+    <input type="password"  name="password" placeholder="Contraseña">
+    <p>Ir a <a href="/login">inicio</a></p>
+    <button type="submit">Registrarse</button>
+  </form>
+</article>
+
+ <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
