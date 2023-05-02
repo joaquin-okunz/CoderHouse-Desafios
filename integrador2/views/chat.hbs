@@ -1,0 +1,19 @@
+<h1>Coder House Chat Comunidad</h1>
+
+<ul id="list-messages">
+  {{#each mensajes}}
+    <li>
+      <p><strong>{{this.nombre}}</strong>: {{this.mensaje}}</p>
+    </li>
+  {{/each}}
+</ul> 
+
+<form id="form-message">
+  <input type="text" name="fullname" id="input-fullname" placeholder="Ingresa tu nombre" required>
+  <input type="text" name="message" id="input-message" placeholder="Ingresa mensaje..." required>
+  <button type="submit">Enviar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/static/javascripts/script.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">

@@ -1,0 +1,29 @@
+<h2>Tu carrito</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Precio</th>
+      <th>Stock</th>
+      <th>Código</th>
+      <th>Categoría</th>
+      <th>Cantidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each carrito}}
+      <tr>
+        <td>{{this.Producto.nombre}}</td>
+        <td>{{this.Producto.description}}</td>
+        <td>{{this.Producto.price}}</td>
+        <td>{{this.Producto.stock}}</td>
+        <td>{{this.Producto.code}}</td>
+        <td>{{this.Producto.categoria}}</td>
+        <td>{{this.quantity}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+<link rel="stylesheet" href="https://unpkg.com/@picocss/pico@1.*/css/pico.min.css">
