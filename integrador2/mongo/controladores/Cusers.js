@@ -1,6 +1,6 @@
 import UserModel from '../modelos/users.js'
 import Utils from '../../utils/index.js'
-import { createHash, validatePassword } from '../../utils/bcrypt.js'
+//import { createHash, validatePassword } from '../../utils/Uindex.js'
 
 class UserController {
 
@@ -19,18 +19,15 @@ class UserController {
     if(!user){
         return res.status(401).json({success: false, message:"email o contraseña incorrectas"})
     }
-    else if(!validatePassword(password, user)){
+    else if(!Utils.validatePassword(password, user)){
         return res.status(401).json({success: false, message:"email o contraseña incorrectas"})
     }
     else {
-    const token = Utils.tokenGenerator(user)
-    res.cookie('token', token, {
-      maxAge: 60 * 60 * 1000,
-      httpOnly: true,
-    }).status(200).json({ success: true })
+        const token = tokenGenerator(user)
+        res.status(201).json({success: true, access_token: token})
+    }
   }
-  }
-
+  
   static async register(req, res) {
     const { body: {first_name, last_name, email, age, password} } = req
     let user = await UserModel.findOne({email})

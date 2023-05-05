@@ -19,6 +19,14 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 class Utils {
 
+  static createHash = (password) => {
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+  }
+  
+  static validatePassword = (password, user) => {
+    return bcrypt.compareSync(password, user.password)
+  }
+
   static uploader = multer({ storage })
 
   static tokenGenerator = (user) => {

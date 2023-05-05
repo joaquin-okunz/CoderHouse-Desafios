@@ -12,6 +12,6 @@ ApiRouter.use("/carritos", routerCarritos);
 ApiRouter.use("/productos", routerProductos);
 ApiRouter.use("/chat", ChatRouter)
 ApiRouter.use("/user", UsersRouter)
-ApiRouter.use("/auth", AUrouter)
+ApiRouter.use("/", AUrouter)
 
 export default ApiRouter;
