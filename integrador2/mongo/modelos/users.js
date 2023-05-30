@@ -6,18 +6,13 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   age: Number,
   password: String,
-  carrito:[{
-    Producto: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Carr"
-    },
-    quantity: {
-      type: Number,
-      default: 1
-    }
-  }],
+  carrito: { type: mongoose.Schema.Types.ObjectId, ref: 'Carrs', require: true },
   avatar: {type: String},
   role: { type: String, default: 'user', enum: ['user', 'admin'] },
-})
+  status: { type: String, default: 'inactive', enum: ['active', 'inactive'] },
+}, { timestamps: true })
+
 
 export default mongoose.model('User', UserSchema)
+
+

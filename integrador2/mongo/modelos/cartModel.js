@@ -1,8 +1,6 @@
 import mongoose from 'mongoose'
 
-const carrColection = "Carr";
-
-const Carr = new mongoose.Schema({
+const carrs = new mongoose.Schema({
   Productos: [{
     Producto: {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,6 +15,6 @@ const Carr = new mongoose.Schema({
   { timestamps: true })
 
 
-const modeloDeCarritos = mongoose.model(carrColection, Carr);
+const modeloDeCarritos = mongoose.model("Carrs", carrs);
 
 export default modeloDeCarritos;

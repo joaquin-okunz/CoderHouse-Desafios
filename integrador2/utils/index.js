@@ -2,6 +2,9 @@ import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import multer from 'multer'
+import dotenv from 'dotenv'
+
+dotenv.config
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,13 +20,14 @@ import Exception from './exeption.js'
 
 const JWT_SECRET = process.env.JWT_SECRET
 
-class Utils {
 
+class Utils {
   static createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
   }
   
   static validatePassword = (password, user) => {
+    console.log(password, user)
     return bcrypt.compareSync(password, user.password)
   }
 
@@ -48,32 +52,37 @@ class Utils {
           console.log('err', error)
           return resolve(false)
         }
-        console.log('payload', payload)
+        //console.log('payload', payload)
         return resolve(payload)
       })
       return token
+      
     })
   }
-  
+
   static authJWTMiddleware = (roles) => (req, res, next) => {
-    passport.authenticate('jwt', function (error, user, info) {  
+    passport.authenticate('jwt', { session: false }, function (error, user, info) {
       if (error) {
-        return next(error)
+        return next(error);
       }
-      if (!user) { 
-        return next(new Exception('Unauthorized' , 401))
+      if (!user) {
+        return res.status(401).json({ success: false, message: 'Unauthorized' });
       }
-      if (!roles.includes(user.role)) { 
-        return next(new Exception('Forbidden' , 403))
+      if (!roles.includes(user.role)) {
+        return res.status(403).json({ success: false, message: 'Forbidden' });
       }
       if (user.role === 'user' && req.params.id && req.params.id !== user.id) {
-        return next(new Exception('Forbidden' , 403))
+        return res.status(403).json({ success: false, message: 'Forbidden' });
       }
-      req.user = user
-      next()
-    })(req, res, next)
+      req.logIn(user, { session: false }, function (err) {
+        if (err) {
+          return next(err);
+        }
+        next();
+      });
+    })(req, res, next);
   }
-
 }
+
 
 export default Utils

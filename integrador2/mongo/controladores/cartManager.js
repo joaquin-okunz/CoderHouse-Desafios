@@ -1,5 +1,12 @@
 import modeloDeCarritos from "../modelos/cartModel.js";
 import modeloDeProducto from "../modelos/productModel.js";
+import UserModel from "../modelos/users.js"
+import Utils from "../../utils/index.js"
+import TiketModel from "../modelos/ticket.js"
+import Util from "../../utils/Utils.js"
+
+
+
 class CarrManager {
 
     static async CreateCarritos(req, res) {
@@ -14,8 +21,17 @@ class CarrManager {
     }
 
     static async getCarritoById(req, res) {
-        const id = req.params.id;
-        const result = await modeloDeCarritos.findById(id).populate('Productos.Producto');
+        const { headers: { authorization } } = req;
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No se proporcionó un token válido' });
+        }
+        const token = authorization.substring(7);
+        const decoded = await Utils.isValidToken(token);
+        const userId = decoded.id
+        const user = await UserModel.findOne({ _id: userId })
+        let carritoId = user.carrito
+        let carrito = await modeloDeCarritos.findOne({ _id: carritoId }).populate("Productos.Producto");
+        const result = carrito
         if (!result) {
             res.status(404).send("Carrito no encontrado.");
         }
@@ -24,15 +40,24 @@ class CarrManager {
 
 
     static async ProductosInCarrito(req, res) {
-        const { cid, pid } = req.body;
+        const { body: { pid }, headers: { authorization } } = req;
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No se proporcionó un token válido' });
+        }
         try {
-            let carrito = await modeloDeCarritos.findById(cid).populate("Productos.Producto");
+            const token = authorization.substring(7);
+            const decoded = await Utils.isValidToken(token);
+            const userId = decoded.id
+            const user = await UserModel.findOne({ _id: userId });
+            let carritoId = user.carrito
+            let carrito = await modeloDeCarritos.findOne({ _id: carritoId }).populate("Productos.Producto");
             if (!carrito) {
                 return res.status(404).json({ message: "Carrito no encontrado" });
             }
             const productIndex = carrito.Productos.findIndex(
                 (p) => p.Producto && p.Producto._id.toString() === pid
-            );
+            )
+
             if (productIndex >= 0) {
                 carrito.Productos[productIndex].quantity += 1;
             } else {
@@ -49,9 +74,17 @@ class CarrManager {
 
 
     static async SumarORestarProductos(req, res) {
-        const { cid, pid, num } = req.body;
+        const { body: { pid, num }, headers: { authorization } } = req;
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No se proporcionó un token válido' });
+        }
         try {
-            let carrito = await modeloDeCarritos.findById(cid).populate("Productos.Producto");
+            const token = authorization.substring(7);
+            const decoded = await Utils.isValidToken(token);
+            const userId = decoded.id
+            const user = await UserModel.findOne({ _id: userId });
+            let carritoId = user.carrito
+            let carrito = await modeloDeCarritos.findOne({ _id: carritoId }).populate("Productos.Producto");
             if (!carrito) {
                 return res.status(404).json("Carrito no encontrado");
             }
@@ -60,7 +93,10 @@ class CarrManager {
             );
             if (productIndex) {
                 carrito.Productos[productIndex].quantity = num;
-            } 
+            }
+            if (num <= 0) {
+                carrito.Productos.splice(productIndex, 1);
+            }
             await carrito.save();
             return res.status(200).json(carrito);
         } catch (error) {
@@ -69,50 +105,52 @@ class CarrManager {
         }
     }
 
-    
+
     static async ProductoOffCarrito(req, res) {
-        const { pid, cid } = req.body;
-    
+        const { body: { pid, num }, headers: { authorization } } = req;
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No se proporcionó un token válido' });
+        }
         try {
-          const carrito = await modeloDeCarritos.findById(cid).populate("Productos.Producto");
-          if (!carrito) {
-            return res.status(404).json( "No se ha podido encontrar el carrito");
-          }
-          const productIndex = carrito.Productos.findIndex(
-            (p) => p.Producto._id.toString() === pid
-          );
-          if (productIndex >= 0) {
-            carrito.Productos[productIndex].quantity -= 1;
-            if (carrito.Productos[productIndex].quantity === 0) {
-                carrito.Productos.splice(productIndex, 1);
+            const token = authorization.substring(7);
+            const decoded = await Utils.isValidToken(token);
+            const userId = decoded.id
+            const user = await UserModel.findOne({ _id: userId });
+            let carritoId = user.carrito
+            let carrito = await modeloDeCarritos.findOne({ _id: carritoId }).populate("Productos.Producto");
+            if (!carrito) {
+                return res.status(404).json("No se ha podido encontrar el carrito");
             }
-            await carrito.save();
-            return res.status(200).json(carrito);
-          } else {
-            return res.status(404).json("No se ha podido borrar el producto");
-          }
+            const productIndex = carrito.Productos.findIndex(
+                (p) => p.Producto._id.toString() === pid
+            );
+            if (productIndex > 0) {
+                carrito.Productos[productIndex].quantity -= 1;
+                if (carrito.Productos[productIndex].quantity <= 0) {
+                    carrito.Productos.splice(productIndex, 1);
+                }
+                await carrito.save();
+                return res.status(200).json(carrito);
+            } else {
+                return res.status(404).json("No se ha podido borrar el producto");
+            }
         } catch (error) {
-          console.log(error);
-          return res.status(500).json("Internal server error");
+            console.log(error);
+            return res.status(500).json("Internal server error");
         }
-      }
-
-
-
-
-    static async DeleteCarrito(req, res) {
-        const { params: { id } } = req
-        const result = await modeloDeCarritos.deleteOne({ _id: id });
-        if (!result) {
-            res.status(404).send("Carrito no encontrado.");
-        }
-        else res.status(201).json(result);
     }
 
-
     static async VoidCarrito(req, res) {
-        const id = req.params.id.toString();
-        const carrito = await modeloDeCarritos.findById(id);
+        const { headers: { authorization } } = req;
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No se proporcionó un token válido' });
+        }
+        const token = authorization.substring(7);
+        const decoded = await Utils.isValidToken(token);
+        const userId = decoded.id
+        const user = await UserModel.findOne({ _id: userId });
+        let carritoId = user.carrito
+        let carrito = await modeloDeCarritos.findOne({ _id: carritoId })
         if (carrito) {
             carrito.Productos.splice(0, carrito.Productos.length);
             await carrito.save();
@@ -121,10 +159,61 @@ class CarrManager {
             res.status(404).send("Not found");
         }
     }
-    
 
 
+    static async compraDeProducto(req, res) {
+        const { headers: { authorization } } = req;
+        if (!authorization || !authorization.startsWith('Bearer ')) {
+            return res.status(401).json({ error: 'No se proporcionó un token válido' });
+        }
+        try {
+            const token = authorization.substring(7);
+            const decoded = await Utils.isValidToken(token);
+            const userId = decoded.id
+            const user = await UserModel.findOne({ _id: userId });
+            let carritoId = user.carrito
+            let carrito = await modeloDeCarritos.findOne({ _id: carritoId })
+
+            let code = Util.generateRandomNumbers
+            let fecha = Util.Moment
+            let amount = Util.PrecioTotal(authorization)
+            let purchaser = Util.BuscarEmail(authorization)
+
+            if (!carrito) {
+                return res.status(404).json("Carrito no encontrado");
+            }
+            let carprod = carrito.Productos
+            for (let productos of carprod) {
+                const IDs = productos.Producto
+                const cantidad = productos.quantity
+                let Prods = await modeloDeProducto.find(IDs)
+                for (let sto of Prods) {
+                    const stock = sto.stock
+                    const result = stock - cantidad;
+                    await Prods.save();
+                }
+                carrito.Productos.splice(0, carrito.Productos.length);
+                await carrito.save();
+            }
+            let ticket = {
+                code: { code },
+                purchase_datetime: { fecha },
+                amount: { amount },
+                purchaser: { purchaser },
+            }
+            let result = TiketModel.create(ticket)
+            if (!ticket) {
+                return res.status(401).json({ error: 'Ocurrió un error al generar el tiket' });
+            }
+            else {
+                return res.json(ticket)
+            }
+            res.json("Ok")
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json("Internal server error");
+        }
+    }
 }
-
 
 export default CarrManager;
