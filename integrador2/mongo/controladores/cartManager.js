@@ -173,12 +173,7 @@ class CarrManager {
             const user = await UserModel.findOne({ _id: userId });
             let carritoId = user.carrito
             let carrito = await modeloDeCarritos.findOne({ _id: carritoId })
-
-            let code = Util.generateRandomNumbers
-            let fecha = Util.Moment
-            let amount = Util.PrecioTotal(authorization)
-            let purchaser = Util.BuscarEmail(authorization)
-
+            let documento
             if (!carrito) {
                 return res.status(404).json("Carrito no encontrado");
             }
@@ -186,29 +181,31 @@ class CarrManager {
             for (let productos of carprod) {
                 const IDs = productos.Producto
                 const cantidad = productos.quantity
-                let Prods = await modeloDeProducto.find(IDs)
-                for (let sto of Prods) {
-                    const stock = sto.stock
-                    const result = stock - cantidad;
-                    await Prods.save();
-                }
-                carrito.Productos.splice(0, carrito.Productos.length);
+                let Prods = await modeloDeProducto.findById(IDs)
+                    if (Prods.stock > cantidad) {
+                        Prods.stock -= cantidad
+                        await Prods.save();
+                    }
+                    else { return res.status(500).json("No hay suficiente stock") }
+                
+                //carrito.Productos.splice(0, carrito.Productos.length);
                 await carrito.save();
             }
-            let ticket = {
-                code: { code },
-                purchase_datetime: { fecha },
-                amount: { amount },
-                purchaser: { purchaser },
-            }
-            let result = TiketModel.create(ticket)
+            let ticket = await TiketModel.create
+                ({
+                    code: await Util.generateRandomNumbers(8),
+                    purchase_datetime: Util.Moment(),
+                    amount: await Util.PrecioTotal(req),
+                    purchaser: await Util.BuscarEmail(req),
+                })
+            //let result = TiketModel.create(ticket)
+            console.log("tu mama")
             if (!ticket) {
                 return res.status(401).json({ error: 'Ocurrió un error al generar el tiket' });
             }
             else {
                 return res.json(ticket)
             }
-            res.json("Ok")
         } catch (error) {
             console.log(error);
             return res.status(500).json("Internal server error");
@@ -217,3 +214,4 @@ class CarrManager {
 }
 
 export default CarrManager;
+

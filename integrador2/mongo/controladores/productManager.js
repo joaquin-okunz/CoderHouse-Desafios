@@ -69,5 +69,3 @@ class ProductManager {
 }
 
 export default ProductManager;
-
-//ss
